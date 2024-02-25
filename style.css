@@ -1,0 +1,71 @@
+body{
+    margin: 1;
+}
+
+input,
+textarea,
+select,
+button {
+  width: 150px;
+  padding: 0;
+  margin: 4px;
+  box-sizing: border-box;
+  border: default;
+}
+
+#container{
+    display: grid;
+    grid-template-rows: 8vh 80vh 9vh;
+    grid-template-columns: 14vw 85vw;
+    gap: 2px;
+}
+
+#container > div{
+    display: grid;
+}
+
+.c1 {
+    grid-area: 1 / 1 / 2 / 3;
+    background: rgb(237,237,237);
+    background: radial-gradient(circle, rgba(237,237,237,1) 22%, rgba(233,152,0,0.9136029411764706) 92%);
+}
+
+#container:nth-child(1) h2{
+    justify-self: stretch;
+    align-self: stretch;    
+    text-align: center;
+}
+
+.c2{
+    grid-area: 2 / 1 / 4 / 2;
+    justify-content: center;
+    align-content: center;
+    background: rgb(30,103,186);
+    background: radial-gradient(circle, rgba(30,103,186,1) 32%, rgba(14,42,74,1) 74%, rgba(20,59,103,1) 87%);
+}
+
+.c2 > div{
+    margin: 1px;
+}
+
+.c3{
+    grid-area: 2 / 2 / 3 / 3;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 20%));
+    justify-content: start;
+    align-content: center;
+    background: rgb(35,97,39);
+    background: radial-gradient(circle, rgba(35,97,39,0.6110819327731092) 4%, rgba(142, 206, 243, 0.914) 91%);
+}
+
+.bookCard{
+    border: 4px solid black;
+    background: rgb(195,55,4);
+    background: radial-gradient(circle, rgb(4, 195, 122) 32%, rgba(0,146,233,0.9136029411764706) 100%);
+}
+
+.c4{
+    grid-area: 3 / 2 / 4 / 3;
+    background: rgb(237,237,237);
+    background: radial-gradient(circle, rgba(237,237,237,1) 48%, rgb(161, 185, 212) 92%, rgba(20,59,103,1) 98%);
+}
