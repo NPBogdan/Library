@@ -19,24 +19,45 @@ function Book(title, author, pages, read, category, readStartDate){
     }; 
 }
 
-let book1 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
-let book2 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
-let book3 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
-let book4 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
-let book5 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
-let book6 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
-let book7 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
-let book8 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
+let book1 = new Book("Harry Potter","Bogdan",450,true, "Action", '2023 04 22');
+let book2 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
+let book3 = new Book("Harry Potter","Bogdan",450,true, "Action", '2023 04 22');
+let book4 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
+let book5 = new Book("Harry Potter","Bogdan",450,true, "Action", '2023 04 22');
+let book6 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
+let book7 = new Book("Harry Potter","Bogdan",450,true, "Action", '2023 04 22');
+let book8 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
 
 book1.info();
 book2.info();
 
 //Add a new book
-const myBooks = [book1,book2,book3,book4,book5,book6,book7,book8];
+const myBooks = [book1, book2, book3, book4, book5, book6, book7, book8];
 
 function addBookToLibrary(book){
     myBooks.push(book);
     loadAndAddBookCard(book);
+}
+
+function toggleReadStatus(book){
+    console.log(book);
+    let bookIndex = book.getAttribute('data');
+    console.log(book);
+    //myBooks[bookIndex].read = !read;
+}
+
+function removeBook(book){
+    let bookIndex = book.parentNode.getAttribute('data');
+    let arr = Array.from(document.querySelectorAll(".c3 > div"));
+    let newArr = arr.slice(bookIndex, arr.length);
+
+    // console.log(newArr);
+    myBooks.splice(bookIndex,1); //Update the original array
+    for(let i = bookIndex; i < arr.length; i++){
+        arr[i].setAttribute('data',arr[i].getAttribute('data') - 1);
+    }
+    document.querySelector(".c3").removeChild(book.parentNode);
+    // console.log(myBooks);
 }
 
 //Create a new book HTML card
@@ -47,8 +68,8 @@ function loadAndAddBookCard(book){
     h5BookHeading.textContent = "Book Details";
     bookElement.appendChild(h5BookHeading);
 
-    bookElement.setAttribute("data",myBooks.indexOf(book));
-    console.log(myBooks.indexOf(book));
+    bookElement.setAttribute("data", myBooks.indexOf(book));
+
     let bookProp = Object.getOwnPropertyNames(book); //Get the properties
 
     bookProp.forEach(element => {
@@ -62,6 +83,12 @@ function loadAndAddBookCard(book){
             case "read":
                 label = document.createElement('div');
                 label.textContent = `Status: ${book[element] ? 'You finished it!' : 'You have not finished it!'}`;
+                if(book[element]){
+                    label.style.color = "green";
+                }
+                else{
+                    label.style.color = "red";
+                }
                 bookElement.appendChild(label);
             break;
             case "category":
@@ -74,19 +101,45 @@ function loadAndAddBookCard(book){
                 label.textContent = "Read start date: " + book[element];
                 bookElement.appendChild(label);
             break;
+            case "title":
+                label  = document.createElement("div");
+                titleLabel = document.createElement("span");
+                titleLabel.textContent = book[element];
+                titleLabel.style.fontSize = '1.5rem';
+                label.textContent = "Book title: ";
+
+                label.appendChild(titleLabel);
+                bookElement.appendChild(label);
+                break;
+            case "author":
+                label = document.createElement("div");
+                label.textContent = `Author: ${book[element]} `;
+                bookElement.appendChild(label);
             case "info":
-            break;
-            default:
-            let bookItem = document.createElement("div");
-            bookItem.textContent = book[element];
-            bookElement.appendChild(bookItem);
+                break;
         }
     });
 
+    //Read Button
+    const readStatusButton = document.createElement('button');
+    readStatusButton.textContent = 'Read';
+    readStatusButton.addEventListener("click",function(e){
+        toggleReadStatus(e);
+   })
+    bookElement.appendChild(readStatusButton);
     document.querySelector(".c3").appendChild(bookElement);
+
+    //Delete Button
+    const deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.addEventListener("click",function(e){
+        removeBook(e.target);
+   })
+    bookElement.appendChild(deleteButton);
 }
 
-document.addEventListener("DOMContentLoaded",function(e){
+document.addEventListener("DOMContentLoaded",function(){
+    //==============================
     for(let i = 0; i < myBooks.length; i++){
         loadAndAddBookCard(myBooks[i]);
     }
@@ -122,10 +175,8 @@ bookDialog.querySelector("#bookDialogConfirm").addEventListener("click",function
     const newBook = new Book(modTitle, author, pages, read, category, readStartDate);
 
     addBookToLibrary(newBook);
-    console.table(myBooks);
 })
 
 bookDialog.querySelector("#bookDialogClose").addEventListener("click",function(){
     bookDialog.close();
 })
-
