@@ -21,26 +21,62 @@ function Book(title, author, pages, read, category, readStartDate){
 
 let book1 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
 let book2 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
+let book3 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
+let book4 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
+let book5 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
+let book6 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
+let book7 = new Book("Harry Potter","Bogdan",450,true, "Action", '10 01 2020');
+let book8 = new Book("LOTR","Petter Jackson",1230,false, "Scfi", '24 05 2022');
 
 book1.info();
 book2.info();
 
 //Add a new book
-const myBooks = [book1,book2];
+const myBooks = [book1,book2,book3,book4,book5,book6,book7,book8];
 
 function addBookToLibrary(book){
     myBooks.push(book);
+    loadAndAddBookCard(book);
 }
 
 //Create a new book HTML card
 function loadAndAddBookCard(book){
     let bookElement = document.createElement("div");
     bookElement.classList.toggle("bookCard");
+    let h5BookHeading = document.createElement('h5');
+    h5BookHeading.textContent = "Book Details";
+    bookElement.appendChild(h5BookHeading);
 
+    bookElement.setAttribute("data",myBooks.indexOf(book));
+    console.log(myBooks.indexOf(book));
     let bookProp = Object.getOwnPropertyNames(book); //Get the properties
 
     bookProp.forEach(element => {
-        if(element != "info"){
+        let label;
+        switch(element){
+            case "pages":
+                label = document.createElement('div');
+                label.textContent = `Pages: ${book[element]}`;
+                bookElement.appendChild(label);
+            break;
+            case "read":
+                label = document.createElement('div');
+                label.textContent = `Status: ${book[element] ? 'You finished it!' : 'You have not finished it!'}`;
+                bookElement.appendChild(label);
+            break;
+            case "category":
+                label = document.createElement('div');
+                label.textContent = "Category is: " + book[element];
+                bookElement.appendChild(label);
+            break;
+            case "readStartDate":
+                label = document.createElement('div');
+                label.textContent = "Read start date: " + book[element];
+                bookElement.appendChild(label);
+            break;
+            case "info":
+            break;
+            default:
             let bookItem = document.createElement("div");
             bookItem.textContent = book[element];
             bookElement.appendChild(bookItem);
