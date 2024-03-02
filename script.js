@@ -28,9 +28,6 @@ let book6 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
 let book7 = new Book("Harry Potter","Bogdan",450,true, "Action", '2023 04 22');
 let book8 = new Book("LOTR","Petter Jackson",1230,false, "Drama", '2023 04 22');
 
-book1.info();
-book2.info();
-
 //Add a new book
 const myBooks = [book1, book2, book3, book4, book5, book6, book7, book8];
 
@@ -40,10 +37,18 @@ function addBookToLibrary(book){
 }
 
 function toggleReadStatus(book){
-    console.log(book);
-    let bookIndex = book.getAttribute('data');
-    console.log(book);
-    //myBooks[bookIndex].read = !read;
+    let bookId = book.getAttribute('data');
+    myBooks[bookId].read = !myBooks[bookId].read;
+    let readElement = book.querySelector(":nth-child(5)");
+    
+    if(myBooks[bookId].read){  
+        readElement.textContent = 'You finished it!';
+        readElement.style.color = "green";
+    }
+    else{
+        readElement.textContent = 'You have not finished it!';
+        readElement.style.color = "red";
+    }
 }
 
 function removeBook(book){
@@ -51,13 +56,11 @@ function removeBook(book){
     let arr = Array.from(document.querySelectorAll(".c3 > div"));
     let newArr = arr.slice(bookIndex, arr.length);
 
-    // console.log(newArr);
     myBooks.splice(bookIndex,1); //Update the original array
     for(let i = bookIndex; i < arr.length; i++){
         arr[i].setAttribute('data',arr[i].getAttribute('data') - 1);
     }
     document.querySelector(".c3").removeChild(book.parentNode);
-    // console.log(myBooks);
 }
 
 //Create a new book HTML card
@@ -124,11 +127,10 @@ function loadAndAddBookCard(book){
     const readStatusButton = document.createElement('button');
     readStatusButton.textContent = 'Read';
     readStatusButton.addEventListener("click",function(e){
-        toggleReadStatus(e);
-   })
+        toggleReadStatus(e.target.parentNode);
+    })
     bookElement.appendChild(readStatusButton);
-    document.querySelector(".c3").appendChild(bookElement);
-
+    
     //Delete Button
     const deleteButton = document.createElement('button');
     deleteButton.textContent = 'Delete';
@@ -136,6 +138,8 @@ function loadAndAddBookCard(book){
         removeBook(e.target);
    })
     bookElement.appendChild(deleteButton);
+
+    document.querySelector(".c3").appendChild(bookElement);
 }
 
 document.addEventListener("DOMContentLoaded",function(){
